@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     private var listaClientes: List<Cliente> = emptyList()
     private var clienteEmEdicao: Cliente? = null
 
-    // Componentes de interface
     private lateinit var etNome: EditText
     private lateinit var etTelefone: EditText
     private lateinit var etEmail: EditText
@@ -31,40 +30,35 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Instancia o banco Room
         db = AppDatabase.getDatabase(this)
 
         inicializarViews()
         configurarListView()
         configurarBotoes()
-
-        // READ inicial
         carregarLista()
     }
 
     private fun inicializarViews() {
-        etNome = findViewById(R.id.etTelefone)
+        etNome = findViewById(R.id.etNome)
         etTelefone = findViewById(R.id.etTelefone)
         etEmail = findViewById(R.id.etEmail)
         etSenha = findViewById(R.id.etSenha)
         btnSalvar = findViewById(R.id.btnSalvar)
-
+        btnLimpar = findViewById(R.id.btnLimpar)
         lvClientes = findViewById(R.id.lvClientes)
     }
 
     private fun configurarListView() {
-        // Usa o layout de item nativo do próprio Android (android.R.layout.simple_list_item_1)
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, ArrayList())
         lvClientes.adapter = adapter
 
-        // Clique simples -> Preenche o formulário para EDITAR (Update)
 
+        lvClientes.setOnItemClickListener { _, _, position, _ ->
+            val cliente = listaClientes[position]
+            preencherCamposParaEdicao(cliente)
+        }
 
-
-
-
-        // Clique longo -> Exibe confirmação para EXCLUIR (Delete)
-        lvClientes.setOnItemLongClickListener { _, _, position, _ ->
+            lvClientes.setOnItemLongClickListener { _, _, position, _ ->
             val cliente = listaClientes[position]
             confirmarExclusao(cliente)
             true
@@ -73,17 +67,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun configurarBotoes() {
         btnSalvar.setOnClickListener { salvarOuAtualizar() }
-
+        btnLimpar.setOnClickListener { limparFormulario() }
     }
 
-    // READ: Carrega todos os registros do SQLite e joga na ListView
+
     private fun carregarLista() {
         lifecycleScope.launch {
             listaClientes = db.clienteDao().listarTodos()
 
-            // Transforma a lista de objetos em Strings legíveis para os alunos
             val dadosFormatados = listaClientes.map { cliente ->
-                "${cliente.id} - ${cliente.nome} | ${cliente.id}"
+                "${cliente.id} - ${cliente.nome} | ${cliente.email}"
             }
 
             adapter.clear()
@@ -92,7 +85,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // CREATE / UPDATE: Insere um novo registro ou atualiza o existente
     private fun salvarOuAtualizar() {
         val nome = etNome.text.toString().trim()
         val telefone = etTelefone.text.toString().trim()
@@ -107,7 +99,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 if (clienteEmEdicao == null) {
-                    // Operação INSERT
                     val novoCliente = Cliente(
                         nome = nome,
                         telefone = telefone,
@@ -137,7 +128,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // DELETE: Remove o registro do SQLite
     private fun confirmarExclusao(cliente: Cliente) {
         AlertDialog.Builder(this)
             .setTitle("Excluir Cliente")

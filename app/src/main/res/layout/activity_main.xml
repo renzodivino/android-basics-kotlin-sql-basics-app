@@ -8,7 +8,7 @@
 
     <EditText
         android:id="@+id/etNome"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nome completo"
         android:inputType="textPersonName" />
@@ -16,7 +16,7 @@
     <EditText
         android:id="@+id/etTelefone"
         android:layout_width="match_parent"
-        android:layout_height="23dp"
+        android:layout_height="wrap_content"
         android:hint="Telefone"
         android:inputType="phone" />
 
@@ -25,14 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="E-mail"
-        android:inputType="number" />
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/etSenha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="12344"
-        android:inputType="number" />
+        android:hint="Senha"
+        android:inputType="textPassword" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
             android:id="@+id/btnSalvar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:text="Salvar" />
 
         <Button
@@ -52,9 +52,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_weight="5"
-            android:enabled="false"
+            android:layout_weight="1"
             android:text="Limpar"
+            android:enabled = "true"
             />
     </LinearLayout>
 
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="4dp"
-        android:text="Clientes Cadastrados (Toque: Editar | Segure: Excluir)"
+        android:text="Clientes Cadastrados (Toque: editar / segure: Excluir)"
         android:textSize="12sp"
         android:textStyle="bold" />
 
@@ -72,5 +72,4 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
 </LinearLayout>
